@@ -3,7 +3,7 @@
 ** Each square holds a Cell and we expose a dropToken method
 ** to add cells to squares.
 */
-function Gameboard () {
+const calculator = (function () {
     const board = [];
 
     // Create 3x3 2d array that will represent the board
@@ -37,7 +37,7 @@ function Gameboard () {
         dropToken,
         printBoard
     }
-}
+})();
 
 
 
