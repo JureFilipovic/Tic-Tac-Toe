@@ -39,9 +39,6 @@ const gameboard = (function () {
     }
 })();
 
-
-
-
 /*
 ** A Cell represents one field on the board
 ** Initial value is an empty string ("")
@@ -63,4 +60,11 @@ function Cell () {
         addToken,
         getValue
     };
+}
+
+/*
+** Function for creating player objects.
+*/
+function Player (name, token) {
+    return { name, token };
 }
