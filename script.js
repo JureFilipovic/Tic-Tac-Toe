@@ -18,6 +18,18 @@ const gameboard = (function () {
     // Method for getting the entire board for rendering.
     const getBoard = () => board;
 
+    // Method for checking if tha entire board is filled.
+    const checkBoardFull = () => {
+         for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board[i][j].getValue() === "") {
+                    return 0;
+                }
+            }
+        }
+        return 1;
+    }
+    
     // Method for adding a player's token to the cell.
     const dropToken = (row, column, playerToken) => {
         // Checks if the cell is empty
@@ -40,6 +52,7 @@ const gameboard = (function () {
     return {
         getBoard,
         dropToken,
+        checkBoardFull,
         printBoard
     }
 })();
