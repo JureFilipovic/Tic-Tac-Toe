@@ -6,14 +6,20 @@
 const gameboard = (function () {
     const board = [];
 
-    // Create 3x3 2d array that will represent the board
-    // and fill it with empty cells.
-    for (let i = 0; i < 3; i++) {
-        board[i] = [];
-        for (let j = 0; j < 3; j++) {
-            board[i].push(Cell());
+    // Method to reset the board to its initial state
+    const resetBoard = () => {
+        // Create 3x3 2d array that will represent the board
+        // and fill it with empty cells.
+        for (let i = 0; i < 3; i++) {
+            board[i] = [];
+            for (let j = 0; j < 3; j++) {
+                board[i].push(Cell());
+            }
         }
-    }
+    };
+    
+    // Initialize the board
+    resetBoard();
 
     // Method for getting the entire board for rendering.
     const getBoard = () => board;
@@ -27,6 +33,7 @@ const gameboard = (function () {
                 }
             }
         }
+        resetBoard();
         return 1;
     }
 
@@ -40,6 +47,7 @@ const gameboard = (function () {
                 board[i][0].getValue() === board[i][1].getValue() &&
                 board[i][1].getValue() === board[i][2].getValue()
             ) {
+                resetBoard();
                 return board[i][0].getValue();
             }
 
@@ -49,6 +57,7 @@ const gameboard = (function () {
                 board[0][i].getValue() === board[1][i].getValue() &&
                 board[1][i].getValue() === board[2][i].getValue()
             ) {
+                resetBoard();
                 return board[0][i].getValue();
             }
         }
@@ -59,6 +68,7 @@ const gameboard = (function () {
             board[0][0].getValue() === board[1][1].getValue() &&
             board[1][1].getValue() === board[2][2].getValue()
         ) {
+            resetBoard();
             return board[0][0].getValue();
         }
 
@@ -67,6 +77,7 @@ const gameboard = (function () {
             board[2][0].getValue() === board[1][1].getValue() &&
             board[1][1].getValue() === board[0][2].getValue()
         ) {
+            resetBoard();
             return board[2][0].getValue();
         }
 
