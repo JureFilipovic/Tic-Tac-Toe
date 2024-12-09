@@ -1,4 +1,4 @@
-/*
+/**
 ** The Gameboard represents the state of the board.
 ** Each square holds a Cell and we expose a dropToken method
 ** to add cells to squares.
@@ -21,9 +21,14 @@ const gameboard = (function () {
     // Method for adding a player's token to the cell.
     const dropToken = (row, column, playerToken) => {
         // Checks if the cell is empty
-        if (board[row][column].getValue() !== "") return;
+        if (board[row][column].getValue() !== "") {
+            console.log("Place already taken!");
+            return 0; // Indicates failure
+        }
+
         // Place the player's token in the empty cell.
         board[row][column].addToken(playerToken);
+        return 1; // Indicates success
     };
 
     // Method for printing a board filled with cell values.
@@ -39,7 +44,7 @@ const gameboard = (function () {
     }
 })();
 
-/*
+/**
 ** A Cell represents one field on the board
 ** Initial value is an empty string ("")
 ** X: Player one's token,
@@ -62,9 +67,12 @@ function Cell () {
     };
 }
 
-/*
+/**
 ** Function for creating player objects.
 */
 function Player (name, token) {
-    return { name, token };
+    const getName = () => name;
+    const getToken = () => token;
+    return { getName, getToken };
 }
+
