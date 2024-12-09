@@ -29,6 +29,49 @@ const gameboard = (function () {
         }
         return 1;
     }
+
+    // Checks win conditions. Returns winning players token
+    // or null if no winner.
+    const checkWin = () => {
+        for (let i = 0; i < 3; i++) {
+            // Check row
+            if (
+                board[i][0].getValue() !== "" &&
+                board[i][0].getValue() === board[i][1].getValue() &&
+                board[i][1].getValue() === board[i][2].getValue()
+            ) {
+                return board[i][0].getValue();
+            }
+
+            // Check column
+            if (
+                board[0][i].getValue() !== "" &&
+                board[0][i].getValue() === board[1][i].getValue() &&
+                board[1][i].getValue() === board[2][i].getValue()
+            ) {
+                return board[0][i].getValue();
+            }
+        }
+
+        // Check diagonals
+        if (
+            board[0][0].getValue() !== "" &&
+            board[0][0].getValue() === board[1][1].getValue() &&
+            board[1][1].getValue() === board[2][2].getValue()
+        ) {
+            return board[0][0].getValue();
+        }
+
+        if (
+            board[2][0].getValue() !== "" &&
+            board[2][0].getValue() === board[1][1].getValue() &&
+            board[1][1].getValue() === board[0][2].getValue()
+        ) {
+            return board[2][0].getValue();
+        }
+
+        return null; // No winner
+    }
     
     // Method for adding a player's token to the cell.
     const dropToken = (row, column, playerToken) => {
