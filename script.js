@@ -8,13 +8,9 @@ const gameboard = (function () {
 
     // Method to reset the board to its initial state
     const resetBoard = () => {
-        // Create 3x3 2d array that will represent the board
-        // and fill it with empty cells.
-        for (let i = 0; i < 3; i++) {
-            board[i] = [];
-            for (let j = 0; j < 3; j++) {
-                board[i].push(Cell());
-            }
+        // Create 1D array filled with 9 Cells that will represent the board
+        for (let i = 0; i < 9; i++) {
+            board[i] = Cell();
         }
     };
     
@@ -24,14 +20,10 @@ const gameboard = (function () {
     // Method for getting the entire board for rendering.
     const getBoard = () => board;
 
-    // Method for checking if tha entire board is filled.
+    // Method for checking if the entire board is filled.
     const checkBoardFull = () => {
-         for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (board[i][j].getValue() === "") {
-                    return 0;
-                }
-            }
+        for (let i = 0; i < 9; i++) {
+            if (board[i] === "") return 0;
         }
         resetBoard();
         return 1;
@@ -40,60 +32,61 @@ const gameboard = (function () {
     // Checks win conditions. Returns winning player's token
     // or null if no winner.
     const checkWin = () => {
-        for (let i = 0; i < 3; i++) {
-            // Check row
+        // Check row
+        for (let i = 0; i < 9; i += 3) {
             if (
-                board[i][0].getValue() !== "" &&
-                board[i][0].getValue() === board[i][1].getValue() &&
-                board[i][1].getValue() === board[i][2].getValue()
+                board[i].getValue() !== "" &&
+                board[i].getValue() === board[i + 1].getValue() &&
+                board[i + 1].getValue() === board[i + 2].getValue()
             ) {
                 resetBoard();
-                return board[i][0].getValue();
-            }
-
-            // Check column
-            if (
-                board[0][i].getValue() !== "" &&
-                board[0][i].getValue() === board[1][i].getValue() &&
-                board[1][i].getValue() === board[2][i].getValue()
-            ) {
-                resetBoard();
-                return board[0][i].getValue();
+                return board[i].getValue();
             }
         }
 
+        // Check column
+        for (let i = 0; i < 3; i++) {
+            if (
+                board[i].getValue() !== "" &&
+                board[i].getValue() === board[i + 3].getValue() &&
+                board[i + 3].getValue() ===board[i + 6].getValue()
+            ) {
+                resetBoard();
+                return board[i].getValue();
+            }
+        }
         // Check diagonals
         if (
-            board[0][0].getValue() !== "" &&
-            board[0][0].getValue() === board[1][1].getValue() &&
-            board[1][1].getValue() === board[2][2].getValue()
+            board[0].getValue() !== "" &&
+            board[0].getValue() === board[4].getValue() &&
+            board[4].getValue() === board[8].getValue()
         ) {
             resetBoard();
-            return board[0][0].getValue();
+            return board[0].getValue();
         }
 
         if (
-            board[2][0].getValue() !== "" &&
-            board[2][0].getValue() === board[1][1].getValue() &&
-            board[1][1].getValue() === board[0][2].getValue()
+            board[2].getValue() !== "" &&
+            board[2].getValue() === board[4].getValue() &&
+            board[4].getValue() === board[6].getValue()
         ) {
             resetBoard();
-            return board[2][0].getValue();
+            return board[2].getValue();
         }
 
         return null; // No winner
     }
     
     // Method for adding a player's token to the cell.
-    const dropToken = (row, column, playerToken) => {
+    const dropToken = (index, playerToken) => {
         // Checks if the cell is empty
-        if (board[row][column].getValue() !== "") {
+        if (board[index].getValue() !== "") {
             console.log("Place already taken!");
             return 0; // Indicates failure
         }
 
         // Place the player's token in the empty cell.
-        board[row][column].addToken(playerToken);
+        board[index].addToken(playerToken);
         return 1; // Indicates success
     };
 
@@ -173,12 +166,12 @@ const game = (function () {
 
     // Method for playing one round. It takes row and column number (starting with 0)
     // and calls gameboards dropToken method. Also prints round and switches players turn.
-    const playRound = (row, column) => {
+    const playRound = (index) => {
         console.log (`Adding ${getActivePlayer().getName()}'s token into 
-                    [${row}][${column}] place.`);
+                    [${index}] place.`);
 
         // Attempt to drop the token and check if it succeeds
-        if (!gameboard.dropToken(row, column, getActivePlayer().getToken())) {
+        if (!gameboard.dropToken(index, getActivePlayer().getToken())) {
             console.log ("Dropping token failed, try again");
             return;
         }
