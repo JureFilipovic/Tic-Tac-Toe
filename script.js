@@ -76,3 +76,51 @@ function Player (name, token) {
     return { getName, getToken };
 }
 
+/**
+ * Function for controlling the game flow.
+ * It exposes playRound and getActivePlayer methods.
+ */
+const game = (function () {
+
+    // Creating players array and two Player objects.
+    const players = [];
+    players[0] = Player ("PlayerOne", "X");
+    players[1] = Player ("PlayerTwo", "O");
+
+    // Setting PlayerOne as default active player
+    let activePlayer = players[0];
+
+    // Method for switching players turn.
+    const switchPlayerTurn = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    }
+
+    // Method for checking which player is active one.
+    const getActivePlayer = () => activePlayer;
+
+    // Method for printing board.
+    const printRound = () => {
+        gameboard.printBoard();
+    }
+
+    // Method for playing one round. It takes row and column number (starting with 0)
+    // and calls gameboards dropToken method. Also prints round and switches players turn.
+    const playRound = (row, column) => {
+        console.log (`Adding ${getActivePlayer().getName()}'s token into 
+                    [${row}][${column}] place.`);
+
+        // Attempt to drop the token and check if it succeeds
+        if (!gameboard.dropToken(row, column, getActivePlayer().getToken())) {
+            console.log ("Dropping token failed, try again");
+            return;
+        }
+
+        printRound();
+        switchPlayerTurn();
+    }
+
+    return {
+        playRound,
+        getActivePlayer 
+    };
+})();
