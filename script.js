@@ -30,7 +30,7 @@ const gameboard = (function () {
         return 1;
     }
 
-    // Checks win conditions. Returns winning players token
+    // Checks win conditions. Returns winning player's token
     // or null if no winner.
     const checkWin = () => {
         for (let i = 0; i < 3; i++) {
@@ -96,6 +96,7 @@ const gameboard = (function () {
         getBoard,
         dropToken,
         checkBoardFull,
+        checkWin,
         printBoard
     }
 })();
@@ -169,6 +170,22 @@ const game = (function () {
         if (!gameboard.dropToken(row, column, getActivePlayer().getToken())) {
             console.log ("Dropping token failed, try again");
             return;
+        }
+
+        // Check for a win
+        const winningToken = gameboard.checkWin();
+        if (winningToken) {
+            const winningPlayer = players.find(player => player.getToken() === winningToken);
+            console.log (`${winningPlayer.getName()} wins the game!`);
+            printRound();
+            return; // End the game
+        }
+
+        // Check for a draw
+        if (gameboard.checkBoardFull()) {
+            console.log ("It is a draw!");
+            printRound();
+            return; // End the game
         }
 
         printRound();
