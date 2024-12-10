@@ -147,6 +147,12 @@ const game = (function () {
     // Method for getting the active player
     const getActivePlayer = () => activePlayer;
 
+    // Reset method to clear the game state
+    const reset = () => {
+        gameboard.resetBoard();
+        activePlayer = players[0];
+    }
+
     // Method for playing one round. It takes row and column number (starting with 0)
     // and calls gameboard's dropToken method. Also prints round and switches players turn.
     const playRound = (index) => {
