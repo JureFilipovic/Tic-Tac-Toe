@@ -23,9 +23,8 @@ const gameboard = (function () {
     // Method for checking if the entire board is filled.
     const checkBoardFull = () => {
         for (let i = 0; i < 9; i++) {
-            if (board[i] === "") return 0;
+            if (board[i].getValue() === "") return 0;
         }
-        resetBoard();
         return 1;
     }
 
@@ -39,7 +38,6 @@ const gameboard = (function () {
                 board[i].getValue() === board[i + 1].getValue() &&
                 board[i + 1].getValue() === board[i + 2].getValue()
             ) {
-                resetBoard();
                 return board[i].getValue();
             }
         }
@@ -51,7 +49,6 @@ const gameboard = (function () {
                 board[i].getValue() === board[i + 3].getValue() &&
                 board[i + 3].getValue() ===board[i + 6].getValue()
             ) {
-                resetBoard();
                 return board[i].getValue();
             }
         }
@@ -61,7 +58,6 @@ const gameboard = (function () {
             board[0].getValue() === board[4].getValue() &&
             board[4].getValue() === board[8].getValue()
         ) {
-            resetBoard();
             return board[0].getValue();
         }
 
@@ -70,7 +66,6 @@ const gameboard = (function () {
             board[2].getValue() === board[4].getValue() &&
             board[4].getValue() === board[6].getValue()
         ) {
-            resetBoard();
             return board[2].getValue();
         }
 
@@ -92,7 +87,7 @@ const gameboard = (function () {
 
     // Method for printing a board filled with cell values.
     const printBoard = () => {
-        const boardCellValues = board.map((row) => row.map((cell) => cell.getValue()));
+        const boardCellValues = board.map(cell => cell.getValue());
         console.log (boardCellValues);
     }
     
@@ -101,6 +96,7 @@ const gameboard = (function () {
         dropToken,
         checkBoardFull,
         checkWin,
+        resetBoard,
         printBoard
     }
 })();
@@ -182,6 +178,7 @@ const game = (function () {
             const winningPlayer = players.find(player => player.getToken() === winningToken);
             console.log (`${winningPlayer.getName()} wins the game!`);
             printRound();
+            gameboard.resetBoard();
             return; // End the game
         }
 
@@ -189,6 +186,7 @@ const game = (function () {
         if (gameboard.checkBoardFull()) {
             console.log ("It is a draw!");
             printRound();
+            gameboard.resetBoard();
             return; // End the game
         }
 
@@ -201,3 +199,4 @@ const game = (function () {
         getActivePlayer 
     };
 })();
+
