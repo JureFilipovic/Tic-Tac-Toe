@@ -177,7 +177,8 @@ const game = (function () {
 
     return {
         playRound,
-        getActivePlayer 
+        getActivePlayer,
+        reset
     };
 })();
 
@@ -227,6 +228,8 @@ const displayController = (function () {
         const result = game.playRound(selectedIndex);
         updateScreen();
 
+        // If there is a result, declare the win or draw and block user from
+        // dropping next token.
         if (result) {
             if (result === "draw") {
                 playerTurnDiv.textContent = "It is a draw.";
@@ -239,8 +242,16 @@ const displayController = (function () {
         }
     }
 
-    boardDiv.addEventListener ("click", clickHandlerBoard);
-
     // Initial render
     updateScreen();
+
+    boardDiv.addEventListener ("click", clickHandlerBoard);
+
+    // Handles the reset button action
+    const resetButton = document.querySelector(".reset");
+    resetButton.addEventListener("click", () => {
+        game.reset();
+        updateScreen();
+        boardDiv.addEventListener("click", clickHandlerBoard);
+    });
 })();
