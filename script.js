@@ -152,7 +152,7 @@ const game = (function () {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
 
-    // Method for checking which player is active one.
+    // Method for getting the active player
     const getActivePlayer = () => activePlayer;
 
     // Method for printing board.
@@ -161,7 +161,7 @@ const game = (function () {
     }
 
     // Method for playing one round. It takes row and column number (starting with 0)
-    // and calls gameboards dropToken method. Also prints round and switches players turn.
+    // and calls gameboard's dropToken method. Also prints round and switches players turn.
     const playRound = (index) => {
         console.log (`Adding ${getActivePlayer().getName()}'s token into 
                     [${index}] place.`);
@@ -200,3 +200,55 @@ const game = (function () {
     };
 })();
 
+/**
+ * displayController Module
+ * ------------------------
+ * Handles the user interface.
+ * It updates the screen to reflect the current game state, displays
+ * the active player's turn, and adds event listeners to the board for
+ * player interactions.
+ */
+const displayController = (function () {
+    const boardDiv = document.querySelector(".board");
+    const playerTurnDiv = document.querySelector(".turn");
+
+    // Method for updating the screen
+    const updateScreen = () => {
+        // clear the screen
+        boardDiv.textContent = "";
+
+        // get newest version of the board and player turn
+        const board = gameboard.getBoard();
+        const activePlayer = game.getActivePlayer();
+
+        // Display player's turn
+        playerTurnDiv.textContent = `${activePlayer.getName()}'s turn...`;
+
+        // Render board squares
+        board.forEach ((cell, index) => {
+            const cellButton = document.createElement("button");
+            cellButton.classList.add("cell");
+
+            // Create data attribute to identify the index of the cell
+            cellButton.dataset.index = index;
+            cellButton.textContent = cell.getValue();
+            boardDiv.appendChild(cellButton);
+        })
+    }
+
+    // Method for adding event listeners to the board
+    const clickHandlerBoard = (e) => {
+        const selectedIndex = parseInt(e.target.dataset.index, 10);
+
+        // Make sure the cell is clicked and not the gaps in between
+        if (isNaN(selectedIndex)) return;
+
+        game.playRound(selectedIndex);
+        updateScreen();
+    }
+
+    boardDiv.addEventListener ("click", clickHandlerBoard);
+
+    // Initial render
+    updateScreen();
+})();
