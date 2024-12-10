@@ -76,7 +76,6 @@ const gameboard = (function () {
     const dropToken = (index, playerToken) => {
         // Checks if the cell is empty
         if (board[index].getValue() !== "") {
-            console.log("Place already taken!");
             return 0; // Indicates failure
         }
 
@@ -84,20 +83,13 @@ const gameboard = (function () {
         board[index].addToken(playerToken);
         return 1; // Indicates success
     };
-
-    // Method for printing a board filled with cell values.
-    const printBoard = () => {
-        const boardCellValues = board.map(cell => cell.getValue());
-        console.log (boardCellValues);
-    }
     
     return {
         getBoard,
         dropToken,
         checkBoardFull,
         checkWin,
-        resetBoard,
-        printBoard
+        resetBoard
     }
 })();
 
@@ -155,20 +147,11 @@ const game = (function () {
     // Method for getting the active player
     const getActivePlayer = () => activePlayer;
 
-    // Method for printing board.
-    const printRound = () => {
-        gameboard.printBoard();
-    }
-
     // Method for playing one round. It takes row and column number (starting with 0)
     // and calls gameboard's dropToken method. Also prints round and switches players turn.
     const playRound = (index) => {
-        console.log (`Adding ${getActivePlayer().getName()}'s token into 
-                    [${index}] place.`);
-
         // Attempt to drop the token and check if it succeeds
         if (!gameboard.dropToken(index, getActivePlayer().getToken())) {
-            console.log ("Dropping token failed, try again");
             return null;
         }
 
@@ -176,19 +159,13 @@ const game = (function () {
         const winningToken = gameboard.checkWin();
         if (winningToken) {
             const winningPlayer = players.find(player => player.getToken() === winningToken);
-            console.log (`${winningPlayer.getName()} wins the game!`);
-            printRound();
             return winningPlayer; // End the game
         }
 
         // Check for a draw
         if (gameboard.checkBoardFull()) {
-            console.log ("It is a draw!");
-            printRound();
             return "draw"; // End the game
         }
-
-        printRound();
         switchPlayerTurn();
     }
 
