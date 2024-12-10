@@ -1,0 +1,22 @@
+.board {
+    display: grid;
+    height: 500px;
+    width: 500px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    border: 5px solid black;
+    padding: 10px;
+    background-color: yellow;
+}
+
+.cell {
+    width: 100%;
+    height: 100%;
+    border: 2px solid black;
+    background-color: lightyellow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    cursor: pointer;
+}
