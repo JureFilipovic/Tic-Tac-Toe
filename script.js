@@ -169,7 +169,7 @@ const game = (function () {
         // Attempt to drop the token and check if it succeeds
         if (!gameboard.dropToken(index, getActivePlayer().getToken())) {
             console.log ("Dropping token failed, try again");
-            return;
+            return null;
         }
 
         // Check for a win
@@ -178,16 +178,14 @@ const game = (function () {
             const winningPlayer = players.find(player => player.getToken() === winningToken);
             console.log (`${winningPlayer.getName()} wins the game!`);
             printRound();
-            gameboard.resetBoard();
-            return; // End the game
+            return winningPlayer; // End the game
         }
 
         // Check for a draw
         if (gameboard.checkBoardFull()) {
             console.log ("It is a draw!");
             printRound();
-            gameboard.resetBoard();
-            return; // End the game
+            return "draw"; // End the game
         }
 
         printRound();
@@ -243,8 +241,19 @@ const displayController = (function () {
         // Make sure the cell is clicked and not the gaps in between
         if (isNaN(selectedIndex)) return;
 
-        game.playRound(selectedIndex);
+        const result = game.playRound(selectedIndex);
         updateScreen();
+
+        if (result) {
+            if (result === "draw") {
+                playerTurnDiv.textContent = "It is a draw.";
+            } else {
+                playerTurnDiv.textContent = `${result.getName()} wins the game.`;
+            }
+            // Prevent screen update if game is over.
+            boardDiv.removeEventListener("click", clickHandlerBoard);
+            return;
+        }
     }
 
     boardDiv.addEventListener ("click", clickHandlerBoard);
