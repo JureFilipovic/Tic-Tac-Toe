@@ -218,6 +218,12 @@ const displayController = (function () {
     const playerTwoScoreDisplay = document.querySelector(".player2score");
     let gameActive = false;
 
+    // Initial message and start game
+    const init = () => {
+        playerTurnDiv.textContent = "Press start button to start the game. Optionally enter names."
+        startButton.addEventListener("click", startGame);
+    }
+
     // Method for getting player's names
     const getPlayerNames = () => {
         const inputNameOne = document.querySelector("#player1name");
@@ -242,9 +248,37 @@ const displayController = (function () {
 
     // Method for starting the game
     const startGame = () => {
+        startButton.disabled = true;
         getPlayerNames();
         gameActive = true;
         updateScreen();
+    }
+
+    // Auto starts new game with same players and score
+    const autoStartNewGame = () => {
+        game.reset();
+        gameActive = true;
+        updateScreen();
+    }
+
+    // Displays result of a game and starts a new one
+    const displayResult = (result) => {
+        const resultDiv = document.createElement("div");
+        resultDiv.classList.add("result");
+
+        if (result === "draw") {
+            resultDiv.textContent = "It's a draw!";
+        } else {
+            resultDiv.textContent = `${result.getName()} wins!`;
+        }
+
+        boardDiv.appendChild (resultDiv);
+
+        // Auto reset after timeout
+        setTimeout(() => {
+            boardDiv.removeChild(resultDiv);
+            autoStartNewGame();
+        }, 3000);
     }
 
     // Method for updating the screen
@@ -289,27 +323,22 @@ const displayController = (function () {
         // If there is a result, declare the win or draw and block user from
         // dropping next token.
         if (result) {
-            if (result === "draw") {
-                playerTurnDiv.textContent = "It is a draw.";
-            } else {
-                playerTurnDiv.textContent = `${result.getName()} wins the game.`;
-            }
-            // Prevent screen update if game is over.
             gameActive = false;
+            displayResult(result);
             return;
         }
     }
 
     // Initial render
-    playerTurnDiv.textContent = "Press Start button to start the game."
-    startButton.addEventListener("click", startGame);
+    init();
+    
 
     boardDiv.addEventListener ("click", clickHandlerBoard);
 
     // Handles the restart button action
     restartButton.addEventListener("click", () => {
+        startButton.disabled = false;
         game.reset();
-        gameActive = true;
-        updateScreen();
+        init();
     });
 })();
