@@ -226,6 +226,9 @@ const displayController = (function () {
         const playerOne = inputNameOne.value || "Player One";
         const playerTwo = inputNameTwo.value || "Player Two";
 
+        inputNameOne.value = "";
+        inputNameTwo.value = "";
+
         game.createPlayers (playerOne, playerTwo);
     }
 
@@ -303,11 +306,10 @@ const displayController = (function () {
 
     boardDiv.addEventListener ("click", clickHandlerBoard);
 
-    // Handles the reset button action
+    // Handles the restart button action
     restartButton.addEventListener("click", () => {
         game.reset();
         gameActive = true;
         updateScreen();
-        boardDiv.addEventListener("click", clickHandlerBoard);
     });
 })();
