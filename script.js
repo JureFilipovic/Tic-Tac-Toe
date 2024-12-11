@@ -1,7 +1,10 @@
 /**
-** The Gameboard represents the state of the board.
-** Each square holds a Cell and we expose a dropToken method
-** to add cells to squares.
+ * Gameboard Module
+ * -----------------
+ * Represents the state of the game board.
+ * - Manages individual cells as Cell objects.
+ * - Provides methods to reset the board, add tokens, check for a winner,
+ *   and determine if the board is full.
 */
 const gameboard = (function () {
     const board = [];
@@ -94,10 +97,11 @@ const gameboard = (function () {
 })();
 
 /**
-** A Cell represents one field on the board
-** Initial value is an empty string ("")
-** X: Player one's token,
-** O: Player two's token.
+ * Cell Factory Function
+ * ----------------------
+ * Represents a single cell on the game board.
+ * - Tracks the value of the cell (empty, "X", or "O").
+ * - Provides methods to add a token to the cell and retrieve its value.
 */
 function Cell () {
     let value = "";
@@ -117,7 +121,11 @@ function Cell () {
 }
 
 /**
-** Function for creating player objects.
+ * Player Factory Function
+ * ------------------------
+ * Creates a Player objects.
+ * - Tracks the player's name, token ("X" or "O") and score.
+ * - Provides methods to retrieve the player's information and update the score.
 */
 function Player (name, token) {
     let score = 0;
@@ -136,8 +144,12 @@ function Player (name, token) {
 }
 
 /**
- * Function for controlling the game flow.
- * It exposes playRound and getActivePlayer methods.
+ * Game Controller Module
+ * -----------------------
+ * Manages the overall game flow.
+ * - Handles player turns, tracks the active player, and determines the winner.
+ * - Resets the game state and maintains player data across rounds.
+ * - Provides methods for creating players, switching turns, and playing a round.
  */
 const game = (function () {
     const players = [];
@@ -204,12 +216,12 @@ const game = (function () {
 })();
 
 /**
- * displayController Module
- * ------------------------
- * Handles the user interface.
- * It updates the screen to reflect the current game state, displays
- * the active player's turn, and adds event listeners to the board for
- * player interactions.
+ * Display Controller Module
+ * --------------------------
+ * Handles the user interface and interactions.
+ * - Updates the display to reflect the current game state.
+ * - Manages event listeners for the game board and control buttons.
+ * - Displays game result and resets the game for new rounds.
  */
 const displayController = (function () {
     const boardDiv = document.querySelector(".board");
