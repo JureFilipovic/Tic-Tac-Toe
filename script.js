@@ -142,6 +142,7 @@ function Player (name, token) {
 const game = (function () {
     const players = [];
     let activePlayer;
+    let startingPlayer = 0;
 
     // Creating players array and two Player objects.
     const createPlayers = (playerOneName, playerTwoName) => {
@@ -166,7 +167,7 @@ const game = (function () {
     // Reset method to clear the game state
     const reset = () => {
         gameboard.resetBoard();
-        activePlayer = players[0];
+        activePlayer = players[startingPlayer];
     }
 
     // Method for playing one round. It takes row and column number (starting with 0)
@@ -182,6 +183,7 @@ const game = (function () {
         if (winningToken) {
             const winningPlayer = players.find(player => player.getToken() === winningToken);
             winningPlayer.increaseScore();
+            startingPlayer = players.indexOf(winningPlayer) === 0 ? 1 : 0;
             return winningPlayer; // End the game
         }
 
@@ -331,13 +333,14 @@ const displayController = (function () {
 
     // Initial render
     init();
-    
 
     boardDiv.addEventListener ("click", clickHandlerBoard);
 
     // Handles the restart button action
     restartButton.addEventListener("click", () => {
         startButton.disabled = false;
+        playerOneScoreDisplay.textContent = "";
+        playerTwoScoreDisplay.textContent = "";
         game.reset();
         init();
     });
