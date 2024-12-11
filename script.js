@@ -267,6 +267,7 @@ const displayController = (function () {
     const displayResult = (result) => {
         const resultDiv = document.createElement("div");
         resultDiv.classList.add("result");
+        restartButton.disabled = true;
 
         if (result === "draw") {
             resultDiv.textContent = "It's a draw!";
@@ -280,13 +281,14 @@ const displayController = (function () {
         setTimeout(() => {
             boardDiv.removeChild(resultDiv);
             autoStartNewGame();
-        }, 3000);
+        }, 2000);
     }
 
     // Method for updating the screen
     const updateScreen = () => {
         // clear the screen
         boardDiv.textContent = "";
+        restartButton.disabled = false;
 
         // get newest version of the board and player turn
         const board = gameboard.getBoard();
