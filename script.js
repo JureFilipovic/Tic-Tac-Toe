@@ -120,9 +120,19 @@ function Cell () {
 ** Function for creating player objects.
 */
 function Player (name, token) {
+    let score;
+
+    const increaseScore = () => score++;
+    const getScore = () => score;
     const getName = () => name;
     const getToken = () => token;
-    return { getName, getToken };
+    
+    return { 
+        getName,
+        getToken,
+        getScore,
+        increaseScore
+    };
 }
 
 /**
@@ -130,14 +140,16 @@ function Player (name, token) {
  * It exposes playRound and getActivePlayer methods.
  */
 const game = (function () {
+    const players = [];
+    let activePlayer;
 
     // Creating players array and two Player objects.
-    const players = [];
-    players[0] = Player ("PlayerOne", "X");
-    players[1] = Player ("PlayerTwo", "O");
-
-    // Setting PlayerOne as default active player
-    let activePlayer = players[0];
+    const createPlayers = (playerOneName, playerTwoName) => {
+        players[0] = Player (playerOneName, "X");
+        players[1] = Player (playerTwoName, "O");
+        activePlayer = players[0];
+    }
+    
 
     // Method for switching players turn.
     const switchPlayerTurn = () => {
@@ -178,7 +190,8 @@ const game = (function () {
     return {
         playRound,
         getActivePlayer,
-        reset
+        reset,
+        createPlayers
     };
 })();
 
@@ -193,6 +206,27 @@ const game = (function () {
 const displayController = (function () {
     const boardDiv = document.querySelector(".board");
     const playerTurnDiv = document.querySelector(".turn");
+    const restartButton = document.querySelector(".restart");
+    const startButton = document.querySelector(".start");
+    let gameActive = false;
+
+    // Method for getting player's names
+    const getPlayerNames = () => {
+        const inputNameOne = document.querySelector("#player1name");
+        const inputNameTwo = document.querySelector("#player2name");
+
+        const playerOne = inputNameOne.value || "Player One";
+        const playerTwo = inputNameTwo.value || "Player Two";
+
+        game.createPlayers (playerOne, playerTwo);
+    }
+
+    // Method for starting the game
+    const startGame = () => {
+        getPlayerNames();
+        gameActive = true;
+        updateScreen();
+    }
 
     // Method for updating the screen
     const updateScreen = () => {
@@ -214,12 +248,15 @@ const displayController = (function () {
             // Create data attribute to identify the index of the cell
             cellButton.dataset.index = index;
             cellButton.textContent = cell.getValue();
+            cellButton.disabled = !gameActive;
             boardDiv.appendChild(cellButton);
         })
     }
 
     // Method for adding event listeners to the board
     const clickHandlerBoard = (e) => {
+        if (!gameActive) return;
+
         const selectedIndex = parseInt(e.target.dataset.index, 10);
 
         // Make sure the cell is clicked and not the gaps in between
@@ -237,20 +274,21 @@ const displayController = (function () {
                 playerTurnDiv.textContent = `${result.getName()} wins the game.`;
             }
             // Prevent screen update if game is over.
-            boardDiv.removeEventListener("click", clickHandlerBoard);
+            gameActive = false;
             return;
         }
     }
 
     // Initial render
-    updateScreen();
+    playerTurnDiv.textContent = "Press Start button to start the game."
+    startButton.addEventListener("click", startGame);
 
     boardDiv.addEventListener ("click", clickHandlerBoard);
 
     // Handles the reset button action
-    const resetButton = document.querySelector(".reset");
-    resetButton.addEventListener("click", () => {
+    restartButton.addEventListener("click", () => {
         game.reset();
+        gameActive = true;
         updateScreen();
         boardDiv.addEventListener("click", clickHandlerBoard);
     });
