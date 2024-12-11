@@ -120,7 +120,7 @@ function Cell () {
 ** Function for creating player objects.
 */
 function Player (name, token) {
-    let score;
+    let score = 0;
 
     const increaseScore = () => score++;
     const getScore = () => score;
@@ -150,6 +150,10 @@ const game = (function () {
         activePlayer = players[0];
     }
     
+    // Expose players array
+    const getPlayers = () => {
+        return players;
+    }
 
     // Method for switching players turn.
     const switchPlayerTurn = () => {
@@ -177,6 +181,7 @@ const game = (function () {
         const winningToken = gameboard.checkWin();
         if (winningToken) {
             const winningPlayer = players.find(player => player.getToken() === winningToken);
+            winningPlayer.increaseScore();
             return winningPlayer; // End the game
         }
 
@@ -191,7 +196,8 @@ const game = (function () {
         playRound,
         getActivePlayer,
         reset,
-        createPlayers
+        createPlayers,
+        getPlayers
     };
 })();
 
@@ -208,6 +214,8 @@ const displayController = (function () {
     const playerTurnDiv = document.querySelector(".turn");
     const restartButton = document.querySelector(".restart");
     const startButton = document.querySelector(".start");
+    const playerOneScoreDisplay = document.querySelector(".player1score");
+    const playerTwoScoreDisplay = document.querySelector(".player2score");
     let gameActive = false;
 
     // Method for getting player's names
@@ -219,6 +227,14 @@ const displayController = (function () {
         const playerTwo = inputNameTwo.value || "Player Two";
 
         game.createPlayers (playerOne, playerTwo);
+    }
+
+    // Update player score display
+    const playerScoreDisplay = () => {
+        const players = game.getPlayers();
+        playerOneScoreDisplay.textContent = `${players[0].getName()} score: ${players[0].getScore()}`;
+        playerTwoScoreDisplay.textContent = `${players[1].getName()} score: ${players[1].getScore()}`;
+
     }
 
     // Method for starting the game
@@ -251,6 +267,8 @@ const displayController = (function () {
             cellButton.disabled = !gameActive;
             boardDiv.appendChild(cellButton);
         })
+
+        playerScoreDisplay();
     }
 
     // Method for adding event listeners to the board
