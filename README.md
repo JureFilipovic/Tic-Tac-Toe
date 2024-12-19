@@ -79,7 +79,7 @@ You can also play the game online here: [Tic-Tac-Toe on GitHub Pages](https://ju
 ---
 
 ## Credits
-This project was built as a learning exercise to practice JavaScript module patterns, DOM manipulation, and game development concepts. Special thanks to the GitHub Pages platform for easy deployment.
+This project was built as a learning exercise to practice JavaScript module patterns, DOM manipulation, and game development concepts. It was developed as part of The Odin Project curriculum, following their guidelines and structure. Special thanks to the GitHub Pages platform for easy deployment.
 
 ---
 
